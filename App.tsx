@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, Button, TouchableOpacity, Alert } from 'react-native';
 import Saudacao from './treco';
-import { Card } from './treco';
+import { Card, Header } from './treco';
 
 export default function App() {
   const handleButtonPress = () => {
@@ -12,6 +12,7 @@ export default function App() {
   }
   return (
     <View style={styles.container}>
+      <Header texto="uma distribuição brasileira"/>
       <Text style={styles.title}>Minha Primeira Tela Interativa</Text>
       <Image
        source={{ uri: 'https://reactnative.dev/img/logo-og.png'}}
@@ -21,7 +22,18 @@ export default function App() {
       <TouchableOpacity style={styles.customButton} onPress={handleTouchablePress}>
         <Text style={styles.buttonText}>Botão Personalizado</Text>
       </TouchableOpacity>
-      <Card/>
+      <Card texto='aaaaaa'/>
+      <Card texto='ddsdsfs'/>
+      <TouchableOpacity 
+      style={[styles.customButton, {backgroundColor: '#dc3545'}]}
+      onPress={() => Alert.alert('Atenção', 'Botão vermelho clicado!')}>
+        <Text style={styles.buttonText}>Botão vermelho</Text>
+      </TouchableOpacity>
+      <TouchableOpacity 
+      style={[styles.customButton, {backgroundColor: 'green', borderRadius: 10}]}
+      onPress={() => Alert.alert('Atenção', 'Botão verde clicado!')}>
+        <Text style={styles.buttonText}>Botão verde</Text>
+      </TouchableOpacity>
     </View>
   );
 }
