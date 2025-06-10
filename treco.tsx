@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
 
 function Saudacao() {
     return (
@@ -16,16 +16,21 @@ function Card(props:{texto:string}) {
     );
 }
 
-export { Card, Header }
+export { Card, Header, CustomCard }
 
 const styles = StyleSheet.create({
     card: {
     backgroundColor: '#fff', 
     padding: 15, 
     borderRadius: 10, 
-    marginTop: 20, 
+    marginBottom: 10, 
     borderWidth: 1, 
-    borderColor: '#ccc', 
+    borderColor: '#ddd', 
+    shadowColor: '#000', 
+    shadowOffset: { width: 0, height: 2}, 
+    shadowOpacity: 0.1, 
+    shadowRadius: 5, 
+    elevation: 3, 
     },
     cardText: {
     fontSize: 16, 
@@ -47,4 +52,12 @@ function Header(props:{texto:string}){
             <Text style={styles.textinho}>{props.texto}</Text>
         </View>
     )
+}
+
+function CustomCard(props:{titulo:string, corFundo:string, onPress:()=>void}) {
+    return (
+        <TouchableOpacity onPress={props.onPress} style={[styles.card, { backgroundColor: props.corFundo}]}>
+            <Text style={styles.cardText}>{props.titulo}</Text>
+        </TouchableOpacity>
+    );
 }
