@@ -3,6 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import HomeScreen from './screens/HomeScreen';
 import DetailsScreen from './screens/DetailsScreen';
 import ProfileScreen from './screens/ProfileScreen';
+import ScrollScreen from './screens/ScrollView';
 
 const Stack = createStackNavigator();
 
@@ -26,6 +27,12 @@ export default function App(){
          name="Profile"
          component={ProfileScreen}
          options={{ title: 'Meu Perfil', headerStyle: { backgroundColor: '#17a2b8'},
+         headerTintColor: '#fff' }} 
+        />
+        <Stack.Screen 
+         name="Scroll"
+         component={ScrollScreen}
+         options={{ title: 'ScrollView', headerStyle: { backgroundColor: '#28a745'},
          headerTintColor: '#fff' }} 
         />
       </Stack.Navigator>
