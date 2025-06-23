@@ -13,8 +13,14 @@ export default function ProfileScreen({ navigation }:any) {
             <TouchableOpacity
                 style={styles.button}
                 onPress={() => navigation.navigate('Details', { mensagem: 'Olá do Perfil!'})}
-                        >
+            >
                 <Text style={styles.buttonText}>Ir para Detalhes</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+                style={[styles.button, { backgroundColor: '#28a745' }]}
+                onPress={() => navigation.navigate('Form')}
+            >
+                <Text style={styles.buttonText}>Ir para Formulario</Text>
             </TouchableOpacity>
         </View>
      );

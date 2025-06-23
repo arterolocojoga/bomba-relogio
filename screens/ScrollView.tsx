@@ -1,14 +1,27 @@
 import { StyleSheet, ScrollView, View, Text, TouchableOpacity } from 'react-native';
+import { useState, useEffect } from 'react';
 
 export default function ScrollScreen({ navigation }:any) {
+    const [clickCount, setClickCount] = useState(0);
+
     return(
         <View style={styles.container}>
             <Text style={styles.title}>Tela com ScrollView</Text>
+            <Text style={styles.title}>Itens clicados: {clickCount}</Text>
             <ScrollView style={styles.scrollContainer}>
                 {Array.from({ length: 20 }).map((_, index) => (
-                    <View key={index} style={styles.item}>
-                        <Text style={styles.itemText}>Item {index + 1}</Text>
-                    </View>
+                    <TouchableOpacity
+                        key={index}
+                        style={styles.item}
+                        onPress={() => {
+                            setClickCount((prevCount) => prevCount + 1);
+                            navigation.navigate('Details', {mensagem: `Item ${index + 1} clicado!`})
+                        }}
+                    >
+                        <View key={index} style={styles.item}>
+                            <Text style={styles.itemText}>Item {index + 1}</Text>
+                        </View>
+                    </TouchableOpacity>
                 ))}
             </ScrollView>
             <TouchableOpacity
@@ -71,5 +84,10 @@ message: {
     fontSize: 18,
     color: '#333',
     marginBottom: 20,
+},
+counterText:{
+        fontSize: 18,
+        color: '#333',
+        marginBottom: 10,
 },
 });

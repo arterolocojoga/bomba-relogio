@@ -4,6 +4,7 @@ import HomeScreen from './screens/HomeScreen';
 import DetailsScreen from './screens/DetailsScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import ScrollScreen from './screens/ScrollView';
+import FormScreen from './screens/FormScreen';
 
 const Stack = createStackNavigator();
 
@@ -33,6 +34,12 @@ export default function App(){
          name="Scroll"
          component={ScrollScreen}
          options={{ title: 'ScrollView', headerStyle: { backgroundColor: '#28a745'},
+         headerTintColor: '#fff' }} 
+        />
+        <Stack.Screen 
+         name="Form"
+         component={FormScreen}
+         options={{ title: 'Formulario', headerStyle: { backgroundColor: '#007bff'},
          headerTintColor: '#fff' }} 
         />
       </Stack.Navigator>
