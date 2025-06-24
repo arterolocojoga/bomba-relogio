@@ -4,7 +4,7 @@ import HomeScreen from './screens/HomeScreen';
 import DetailsScreen from './screens/DetailsScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import ScrollScreen from './screens/ScrollView';
-import FormScreen from './screens/FormScreen';
+import FormScreen from './screens/AddTask';
 
 const Stack = createStackNavigator();
 

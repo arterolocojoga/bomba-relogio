@@ -1,13 +1,8 @@
 import { StyleSheet, View, Text, FlatList, TouchableOpacity, Alert } from 'react-native';
 import { useState, useEffect } from 'react';
+import {DATA} from './AddTask'
+import CustomCard from '../CustomCard';
 
-const DATA = [
-    { id: '1', title:'Item 1', description: 'Descrição do item 1'},
-    { id: '2', title:'Item 2', description: 'Descrição do item 2'},
-    { id: '3', title:'Item 3', description: 'Descrição do item 3'},
-    { id: '4', title:'Item 4', description: 'Descrição do item 4'},
-    { id: '5', title:'Item 5', description: 'Descrição do item 5'},
-]
 
 export default function HomeScreen({ navigation }:any) {
     const [count, setCount] = useState(0);
@@ -21,13 +16,15 @@ export default function HomeScreen({ navigation }:any) {
     }, [count])
     
     const renderItem = ({ item }: any) => (
+        <CustomCard tile=''>
         <TouchableOpacity
-                style={styles.card}
-                onPress={() => navigation.navigate('Details', { item })}
-            >
+        style={styles.card}
+        onPress={() => navigation.navigate('Details', {item})}
+        >
                 <Text style={styles.cardTitle}>{item.title}</Text>
                 <Text style={styles.cardDescription}>{item.description}</Text>
         </TouchableOpacity>
+        </CustomCard>
     )
 
     return (
@@ -55,6 +52,12 @@ export default function HomeScreen({ navigation }:any) {
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={[styles.button, { backgroundColor: '#28a745' }]}
+                    onPress={() => navigation.navigate('Form')}
+                >
+                    <Text style={styles.buttonText}>addtask</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={[styles.button, { backgroundColor: '#28a745' }]}
                     onPress={() => navigation.navigate('Profile')}
                 >
                     <Text style={styles.buttonText}>Ir para Perfil</Text>
@@ -65,7 +68,7 @@ export default function HomeScreen({ navigation }:any) {
                 renderItem={renderItem}
                 keyExtractor={(item) => item.id}
                 style={styles.list}
-                />
+            />
             <TouchableOpacity
                 style={[styles.button, { backgroundColor: '#28a745' }]}
                 onPress={() => navigation.navigate('Profile')}

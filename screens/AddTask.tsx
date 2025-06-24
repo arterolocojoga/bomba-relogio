@@ -2,14 +2,21 @@ import { StyleSheet, View, Text, FlatList, TouchableOpacity, Alert } from 'react
 import { useState, useEffect } from 'react';
 import { TextInput } from 'react-native-gesture-handler';
 
+export let DATA: {[key: string]: any}[] = [
+    
+]
+
 export default function FormScreen({ navigation }:any) {
-    const [nome, setNome] = useState('');
-    const [email, setEmail] = useState('');
+    const [titulo, setTitulo] = useState('');
+    const [desc, setDesc] = useState('');
+    const [ID, setId] = useState(0);
+
 
     useEffect(() => {
-        if (nome.length > 0) {
+        if (titulo.length > 0) {
         }
-    }, [nome]);
+    }, [titulo]);
+
 
     useEffect(() => {
         console.log('FormScreen montada!');
@@ -19,8 +26,9 @@ export default function FormScreen({ navigation }:any) {
     }, [])
 
     const handleSubmit = () => {
-        if (nome.trim()) {
-            navigation.navigate('Details', { mensagem: `Nome: ${nome}, Email: ${email}`});
+        if (titulo.trim()) {
+            const newid = setId(ID+1)
+            DATA.push({id: newid, title: titulo, description: desc});
         }else {
             Alert.alert('Erro', 'Por favor, preencha todos os campos.');
         }
@@ -31,16 +39,15 @@ export default function FormScreen({ navigation }:any) {
             <Text style={styles.title}>Formulário</Text>
             <TextInput
                 style={styles.input}
-                placeholder='Digite seu nome'
-                value={nome}
-                onChangeText={setNome}
+                placeholder='Digite o titulo da tarefa'
+                value={titulo}
+                onChangeText={setTitulo}
             />
             <TextInput
                 style={styles.input}
-                placeholder='Digite seu email'
-                value={email}
-                onChangeText={setEmail}
-                keyboardType='email-address'
+                placeholder='Digite a descrição'
+                value={desc}
+                onChangeText={setDesc}
             />
             <TouchableOpacity style={styles.button} onPress={handleSubmit}>
                 <Text style={styles.buttonText}>Enviar</Text>
