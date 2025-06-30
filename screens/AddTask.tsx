@@ -17,13 +17,7 @@ export default function FormScreen({ navigation }:any) {
         }
     }, [titulo]);
 
-
-    useEffect(() => {
-        console.log('FormScreen montada!');
-        return () => {
-            console.log('FormScreen desmontada!')
-        };
-    }, [])
+    useEffect(() => {console.log('home')}, [])
 
     const handleSubmit = () => {
         if (titulo.trim()) {
@@ -57,12 +51,6 @@ export default function FormScreen({ navigation }:any) {
                 onPress={() => navigation.navigate('Home')}
             >
                 <Text style={styles.buttonText}>Voltar para Home</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-                style={[styles.button, { backgroundColor: '#dc3545'}]}
-                onPress={() => navigation.navigate('Scroll')}
-            >
-                <Text style={styles.buttonText}>Voltar para Scroll</Text>
             </TouchableOpacity>
         </View>
     )

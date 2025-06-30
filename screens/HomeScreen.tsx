@@ -5,18 +5,9 @@ import CustomCard from '../CustomCard';
 
 
 export default function HomeScreen({ navigation }:any) {
-    const [count, setCount] = useState(0);
 
-    useEffect(() => {
-        if (count === 10) {
-            Alert.alert('Parabéns!', 'você atingiu 10 cliques')
-        }else if (count === 0){
-            Alert.alert('resetado', 'o contador foi zerado')
-        }
-    }, [count])
+    useEffect(() => {console.log('home')}, [])
 
-    useEffect(() => {}, [DATA.push()]);
-    
     const renderItem = ({ item }: any) => (
         <CustomCard
             Children={
@@ -31,40 +22,39 @@ export default function HomeScreen({ navigation }:any) {
         />
     )
 
+    const Aniquilar = () => {
+        Alert.alert('Atenção', 'Deseja realmente aniquilar a lista?', [
+            {
+                text: 'Cancelar',
+                style: 'cancel',
+            },
+            {
+                text: 'Sim',
+                style: 'destructive',
+                onPress: () => {
+                    DATA.length = 0;
+                    navigation.navigate('Home');
+                    Alert.alert('Lista Aniquilada', 'A lista foi aniquilada com sucesso!');
+                },
+            },
+        ]);
+    };
+
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Lista de Itens</Text>
             <View style={styles.counterContainer}>
-                <Text style={styles.counterText}>contador: {count}</Text>
                 <TouchableOpacity
                     style={styles.counterButton}
-                    onPress={() => setCount((prev) => prev + 1)}
+                    onPress={Aniquilar}
                 >
-                    <Text style={styles.buttonText}>incrementar</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={styles.counterButton}
-                    onPress={() => setCount((prev) => Math.max(0, prev - 1))}
-                >
-                    <Text style={styles.buttonText}>decrementar</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={[styles.counterButton, {backgroundColor: '#dc3545'}]}
-                    onPress={() => setCount(0)}
-                >
-                    <Text style={styles.buttonText}>resetar</Text>
+                    <Text style={styles.buttonText}>Aniquilar lista</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={[styles.button, { backgroundColor: '#28a745' }]}
                     onPress={() => navigation.navigate('Form')}
                 >
                     <Text style={styles.buttonText}>addtask</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={[styles.button, { backgroundColor: '#28a745' }]}
-                    onPress={() => navigation.navigate('Profile')}
-                >
-                    <Text style={styles.buttonText}>Ir para Perfil</Text>
                 </TouchableOpacity>
             </View>
             <FlatList
@@ -73,12 +63,6 @@ export default function HomeScreen({ navigation }:any) {
                 keyExtractor={(item) => item.id}
                 style={styles.list}
             />
-            <TouchableOpacity
-                style={[styles.button, { backgroundColor: '#28a745' }]}
-                onPress={() => navigation.navigate('Profile')}
-            >
-                <Text style={styles.buttonText}>Ir para Perfil</Text>
-            </TouchableOpacity>
         </View>
      );
 }
