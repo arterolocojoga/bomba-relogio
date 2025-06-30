@@ -14,17 +14,21 @@ export default function HomeScreen({ navigation }:any) {
             Alert.alert('resetado', 'o contador foi zerado')
         }
     }, [count])
+
+    useEffect(() => {}, [DATA.push()]);
     
     const renderItem = ({ item }: any) => (
-        <CustomCard tile=''>
-        <TouchableOpacity
-        style={styles.card}
-        onPress={() => navigation.navigate('Details', {item})}
-        >
-                <Text style={styles.cardTitle}>{item.title}</Text>
-                <Text style={styles.cardDescription}>{item.description}</Text>
-        </TouchableOpacity>
-        </CustomCard>
+        <CustomCard
+            Children={
+                <TouchableOpacity
+                    style={styles.card}
+                    onPress={() => navigation.navigate('Details', { item })}
+                >
+                    <Text style={styles.cardTitle}>{item.title}</Text>
+                    <Text style={styles.cardDescription}>{item.description}</Text>
+                </TouchableOpacity>
+            }
+        />
     )
 
     return (

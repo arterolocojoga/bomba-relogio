@@ -1,10 +1,10 @@
-import { Text, StyleSheet, TouchableOpacity } from "react-native";
+import { StyleSheet, TouchableOpacity, Text, View } from "react-native";
 
-export default function CustomCard(props:{titulo:string, corFundo:string, onPress:()=>void}) {
+export default function CustomCard(props:{Children:any}) {
     return (
-        <TouchableOpacity onPress={props.onPress} style={[styles.card, { backgroundColor: props.corFundo}]}>
-            <Text style={styles.cardText}>{props.titulo}</Text>
-        </TouchableOpacity>
+        <View>
+            {props.Children}
+        </View>
     );
 }
 
@@ -22,9 +22,15 @@ const styles = StyleSheet.create({
     shadowRadius: 5, 
     elevation: 3, 
     },
-    cardText: {
-    fontSize: 16, 
-    color: '#333', 
+    cardTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#333',
+    },
+    cardDescription: {
+        fontSize: 14,
+        color: '#666',
+        marginTop: 5,
     },
     header:{
     backgroundColor:'blue',
