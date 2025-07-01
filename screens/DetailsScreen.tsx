@@ -15,7 +15,7 @@ export default function DetailsScreen({ navigation, route }:any) {
             )}
             {mensagem && <Text>{mensagem}</Text>}
             <TouchableOpacity
-                style={styles.button}
+                style={[styles.button, { backgroundColor: '#ffd700' }]}
                 onPress={() => navigation.goBack()}
             >
                 <Text style={styles.buttonText}>Voltar</Text>

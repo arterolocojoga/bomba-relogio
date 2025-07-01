@@ -14,19 +14,19 @@ export default function App(){
          name="Home"
          component={HomeScreen}
          options={{ title: 'Tela Principal', headerStyle: { backgroundColor: '#007bff'},
-         headerTintColor: '#fff' }}
+         headerTintColor: '#fff', headerLeft: () => null}}
         />
         <Stack.Screen 
          name="Details"
          component={DetailsScreen}
-         options={{ title: 'Detalhes', headerStyle: { backgroundColor: '#dc3545'},
-         headerTintColor: '#fff' }} 
+         options={{ title: 'Detalhes', headerStyle: { backgroundColor: '#ffd700'},
+         headerTintColor: '#fff', headerLeft: () => null}} 
         />
         <Stack.Screen 
          name="Form"
          component={FormScreen}
-         options={{ title: 'Formulario', headerStyle: { backgroundColor: '#007bff'},
-         headerTintColor: '#fff' }} 
+         options={{ title: 'Formulario', headerStyle: { backgroundColor: '#28a745'},
+         headerTintColor: '#fff', headerLeft: () => null}} 
         />
       </Stack.Navigator>
     </NavigationContainer>

@@ -5,9 +5,12 @@ import CustomCard from '../CustomCard';
 
 
 export default function HomeScreen({ navigation }:any) {
+    let [tarefa, setTarefa] = useState(DATA);
 
-    useEffect(() => {console.log('home')}, [])
+    useEffect(() => {setTarefa([...DATA]);}, [DATA]);
 
+    useEffect(() => {navigation.navigate('Home')}, [tarefa]);
+    
     const renderItem = ({ item }: any) => (
         <CustomCard
             Children={
@@ -33,7 +36,7 @@ export default function HomeScreen({ navigation }:any) {
                 style: 'destructive',
                 onPress: () => {
                     DATA.length = 0;
-                    navigation.navigate('Home');
+                    setTarefa([]);
                     Alert.alert('Lista Aniquilada', 'A lista foi aniquilada com sucesso!');
                 },
             },
@@ -45,7 +48,7 @@ export default function HomeScreen({ navigation }:any) {
             <Text style={styles.title}>Lista de Itens</Text>
             <View style={styles.counterContainer}>
                 <TouchableOpacity
-                    style={styles.counterButton}
+                    style={[styles.counterButton, { backgroundColor: '#dc3545' }]}
                     onPress={Aniquilar}
                 >
                     <Text style={styles.buttonText}>Aniquilar lista</Text>
@@ -58,7 +61,7 @@ export default function HomeScreen({ navigation }:any) {
                 </TouchableOpacity>
             </View>
             <FlatList
-                data={DATA}
+                data={tarefa}
                 renderItem={renderItem}
                 keyExtractor={(item) => item.id}
                 style={styles.list}
