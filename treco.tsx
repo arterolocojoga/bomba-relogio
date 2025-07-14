@@ -16,7 +16,7 @@ function Card(props:{texto:string}) {
     );
 }
 
-export { Card, Header, CustomCard }
+export { Card, Header, TaskCard }
 
 const styles = StyleSheet.create({
     card: {
@@ -54,10 +54,13 @@ function Header(props:{texto:string}){
     )
 }
 
-function CustomCard(props:{titulo:string, corFundo:string, onPress:()=>void}) {
+function TaskCard(props:{title:String,completed:any,onPress:any, onToggle:any, id: String | Number,}) {
+    
+
     return (
-        <TouchableOpacity onPress={props.onPress} style={[styles.card, { backgroundColor: props.corFundo}]}>
-            <Text style={styles.cardText}>{props.titulo}</Text>
+        <TouchableOpacity style={styles.card} onPress={props.onPress}>
+            <Text style={styles.cardText}>{props.title}</Text>
+            
         </TouchableOpacity>
     );
 }

@@ -1,82 +1,166 @@
-import { StyleSheet, View, Text, FlatList, TouchableOpacity, Alert } from 'react-native';
-import { useState, useEffect } from 'react';
+import { StyleSheet, View, Text, FlatList, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
+import { useState, useEffect, act } from 'react';
+import axios, { all } from 'axios';
+import TaskCard from '../components/taskCard';
+import CustomButton from '../components/customButton';
+import CustomModal from '../components/customModal';
 
-const DATA = [
-    { id: '1', title:'Item 1', description: 'Descrição do item 1'},
-    { id: '2', title:'Item 2', description: 'Descrição do item 2'},
-    { id: '3', title:'Item 3', description: 'Descrição do item 3'},
-    { id: '4', title:'Item 4', description: 'Descrição do item 4'},
-    { id: '5', title:'Item 5', description: 'Descrição do item 5'},
-]
+type Task = {
+    id: number | string;
+    title: string;
+    description?: string;
+    completed: boolean;
+};
 
 export default function HomeScreen({ navigation }:any) {
-    const [count, setCount] = useState(0);
+    const [localTasks, setLocalTasks] = useState<Task[]>([]);
+    const [apiTasks, setApiTasks] = useState<Task[]>([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState('');
+    const [modalVisible, setModalVisible] = useState(false);
+    const [taskToDelete, setTaskToDelete] = useState<Task | null>(null);
+
 
     useEffect(() => {
-        if (count === 10) {
-            Alert.alert('Parabéns!', 'você atingiu 10 cliques')
-        }else if (count === 0){
-            Alert.alert('resetado', 'o contador foi zerado')
-        }
-    }, [count])
-    
-    const renderItem = ({ item }: any) => (
-        <TouchableOpacity
-                style={styles.card}
-                onPress={() => navigation.navigate('Details', { item })}
-            >
-                <Text style={styles.cardTitle}>{item.title}</Text>
-                <Text style={styles.cardDescription}>{item.description}</Text>
-        </TouchableOpacity>
-    )
+        setIsLoading(true);
+        axios.get('https://jsonplaceholder.typicode.com/todos?_limit=5')
+            .then(response => {
+                setApiTasks(response.data);
+                setIsLoading(false);
+            })
+            .catch(err => {
+                setError('Erro ao carregar tarefas da API');
+                setIsLoading(false);
+            })
+    }, []);
+
+    const addTask = ({title, descripition}:any) => {
+        setLocalTasks((prev) => [
+            ...prev,
+            { id: Date.now().toString(), title, description: descripition || '', completed: false },
+        ])
+    };
+
+    const toggleTaskCompletion = (id: any) => {
+        setLocalTasks((prev) =>
+            prev.map((task) =>
+                task.id === id ? { ...task, completed: !task.completed } : task
+            )
+        );
+    }
+
+    const allTasks = [...apiTasks, ...localTasks];
+
+    const renderItem = ({ item }:any) => {
+        const isLocal = typeof item.id === 'string';
+        
+        return (
+            <>
+                <Text style={styles.sourceText}>{!item.userId ? 'Local' : 'API'}</Text>
+                <TaskCard
+                    title={item.title}
+                    completed={item.completed}
+                    onPress={isLocal ? () => navigation.navigate('Details', { task: item }) : null}
+                    onToggle={isLocal ? () => toggleTaskCompletion(item.id) : null}
+                    onDelete={() => {
+                        if (isLocal) {
+                            setTaskToDelete(item.id);
+                            setModalVisible(true);
+                        }
+                    }}
+                />
+            </>
+        )
+    }
+
+    const deleteTask = (id: any) => {
+        setLocalTasks((prev) => prev.filter((task) => task.id !== id));
+        setModalVisible(false);
+        setTaskToDelete(null);
+    }
+
+    const [filter, setFilter] = useState('all');
+
+    const filteredTasks = allTasks.filter((task) => {
+        if (filter === 'pending') return !task.completed;
+        if (filter === 'completed') return task.completed;
+        return true;
+    });
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Lista de Itens</Text>
-            <View style={styles.counterContainer}>
-                <Text style={styles.counterText}>contador: {count}</Text>
-                <TouchableOpacity
-                    style={styles.counterButton}
-                    onPress={() => setCount((prev) => prev + 1)}
-                >
-                    <Text style={styles.buttonText}>incrementar</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={styles.counterButton}
-                    onPress={() => setCount((prev) => Math.max(0, prev - 1))}
-                >
-                    <Text style={styles.buttonText}>decrementar</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={[styles.counterButton, {backgroundColor: '#dc3545'}]}
-                    onPress={() => setCount(0)}
-                >
-                    <Text style={styles.buttonText}>resetar</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={[styles.button, { backgroundColor: '#28a745' }]}
-                    onPress={() => navigation.navigate('Profile')}
-                >
-                    <Text style={styles.buttonText}>Ir para Perfil</Text>
-                </TouchableOpacity>
-            </View>
-            <FlatList
-                data={DATA}
-                renderItem={renderItem}
-                keyExtractor={(item) => item.id}
-                style={styles.list}
+            <View style={styles.filterContainer}>
+                <CustomButton
+                    title="Todas"
+                    onPress={() => setFilter('all')}
+                    color={filter === 'all' ? '#007bff' : '#ddd'}
+                    textStyle={{ color: filter === 'all' ? '#fff' : '#333' }}
                 />
+                <CustomButton
+                    title="Pendentes"
+                    onPress={() => setFilter('pending')}
+                    color={filter === 'pending' ? '#007bff' : '#ddd'}
+                    textStyle={{ color: filter === 'all' ? '#fff' : '#333' }}
+                />
+                <CustomButton
+                    title="Concluídas"
+                    onPress={() => setFilter('completed')}
+                    color={filter === 'completed' ? '#007bff' : '#ddd'}
+                    textStyle={{ color: filter === 'all' ? '#fff' : '#333' }}
+                />
+            </View>
+            <Text style={styles.title}>Minha Tarefas</Text>
+            <Text style={styles.counterText}>
+                Tarefas: {allTasks.length} | Concluídas: {allTasks.filter((task) => task.completed).length}
+            </Text>
+            { isLoading ? (
+                <ActivityIndicator size="large" color="#007bff" />
+            ) : error ? (
+                <Text style={styles.errorText}>{error}</Text>
+            ) : allTasks.length === 0 ? (
+                <Text style={styles.emptyText}>Nenhuma tarefa adicionada</Text>
+            ) : (
+                <FlatList
+                    data={filteredTasks}
+                    renderItem={renderItem}
+                    keyExtractor={(item) => item.id.toString()}
+                    style={styles.list}
+                    ItemSeparatorComponent={() => <View style={styles.separator} />}
+                />
+            )}
             <TouchableOpacity
-                style={[styles.button, { backgroundColor: '#28a745' }]}
-                onPress={() => navigation.navigate('Profile')}
+                style={styles.button}
+                onPress={() => navigation.navigate('AddTask', { addTask })}
             >
-                <Text style={styles.buttonText}>Ir para Perfil</Text>
+                <Text style={styles.buttonText}>Adicionar Tarefa</Text>
             </TouchableOpacity>
         </View>
      );
 }
 
 const styles = StyleSheet.create({
+    sourceText: {
+        fontSize: 12,
+        color: '#999',
+        marginTop: 5,
+    },
+    filterContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        marginBottom: 10,
+    },
+    filterButton: {
+        padding: 10,
+        borderRadius: 5,
+        backgroundColor: '#ddd',
+    },
+    activeFilterButton: {
+        backgroundColor: '#007bff',
+    },
+    filterText: {
+        color: '#fff',
+        fontSize: 14,
+    },
     container: {
         flex: 1,
         backgroundColor: '#f5f5f5',
@@ -85,12 +169,48 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 24,
         fontWeight: 'bold',
-        marginBottom: 20,
+        marginBottom: 10,
         color: '#333',
         textAlign: 'center',
     },
+    counterText:{
+        fontSize: 16,
+        color: '#333',
+        marginBottom: 10,
+        textAlign: 'center',
+    },
+    emptyText: {
+        fontSize: 16,
+        color: '#666',
+        textAlign: 'center',
+        marginTop: 20,
+    },
+    errorText: {
+        fontSize: 16,
+        color: '#dc3545',
+        textAlign: 'center',
+        marginTop: 20,
+    },
     list: {
         flex: 1,
+    },
+    separator: {
+        height: 1,
+        backgroundColor: '#ddd',
+        marginVertical: 5,
+    },
+    addbutton: {
+        backgroundColor: '#28a745',
+        paddingVertical: 12,
+        paddingHorizontal: 20,
+        borderRadius: 10,
+        alignItems: 'center',
+        marginBottom: 10,
+    },
+    buttonText: {
+        color: '#fff',
+        fontSize: 16,
+        fontWeight: 'bold',
     },
     card:{
         backgroundColor: '#fff',
@@ -122,19 +242,9 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         alignItems: 'center',
     },
-    buttonText: {
-        color: '#fff',
-        fontSize: 16,
-        fontWeight: 'bold',
-    },
     counterContainer:{
         alignItems: 'center',
         marginBottom: 20,
-    },
-    counterText:{
-        fontSize: 18,
-        color: '#333',
-        marginBottom: 10,
     },
     counterButton:{
         backgroundColor: '#007bff',

@@ -5,6 +5,7 @@ import DetailsScreen from './screens/DetailsScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import ScrollScreen from './screens/ScrollView';
 import FormScreen from './screens/FormScreen';
+import AddTaskScreen from './screens/AddTaskScreen';
 
 const Stack = createStackNavigator();
 
@@ -17,6 +18,12 @@ export default function App(){
          component={HomeScreen}
          options={{ title: 'Tela Principal', headerStyle: { backgroundColor: '#007bff'},
          headerTintColor: '#fff' }}
+        />
+        <Stack.Screen 
+         name="AddTask"
+         component={AddTaskScreen}
+         options={{ title: 'Adicionar Tarefa', headerStyle: { backgroundColor: '#28a745'},
+         headerTintColor: '#fff' }} 
         />
         <Stack.Screen 
          name="Details"
